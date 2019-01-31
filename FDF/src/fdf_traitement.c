@@ -11,13 +11,14 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "fdf1.h"
+#include "fdf.h"
 
 void	rotate(t_fdf *fdf, t_flst *tmp, int i, int j)
 {
 	fdf->f_tab[i][j].x = (j - fdf->map_width / 2) * cos(fdf->teta) - (i - fdf->map_height / 2) * sin(fdf->teta);
 	fdf->f_tab[i][j].y = (j - fdf->map_width / 2) * sin(fdf->teta) + (i - fdf->map_height / 2) * cos(fdf->teta);
 	fdf->f_tab[i][j].z = tmp->i_tab[j] * fdf->elev;
+	fdf->f_tab[i][j].z_tmp = fdf->f_tab[i][j].z;
 	fdf->f_tab[i][j].y = fdf->f_tab[i][j].y * cos(fdf->x_teta) + tmp->i_tab[j] * fdf->elev * sin(fdf->x_teta);
 	fdf->f_tab[i][j].z = tmp->i_tab[j] * fdf->elev * cos(fdf->x_teta) - fdf->f_tab[i][j].y * sin(fdf->x_teta);
 	fdf->f_tab[i][j].x = fdf->f_tab[i][j].x * cos(fdf->y_teta) + tmp->i_tab[j] * fdf->elev * sin(fdf->y_teta);

@@ -11,11 +11,13 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "fdf1.h"
+#include "fdf.h"
 
 void	init_color(t_fdf *fdf)
 {
-	fdf->color.r = 255;
-	fdf->color.g = 255;
-	fdf->color.b = 255;
+	fdf->color.red = 0;
+	fdf->color.green = 0;
+	fdf->color.blue = 0;
+	fdf->color.startc = 0xFFFFFF;
+	fdf->color.endc = 0xFF5500;
 }

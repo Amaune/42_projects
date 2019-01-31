@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   fdf1.h                                           .::    .:/ .      .::   */
+/*   fdf.h                                            .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: amaune <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
@@ -11,12 +11,14 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef FDF1_H
-# define FDF1_H
+#ifndef FDF_H
+# define FDF_H
 
 # include "../minilibx_macos/mlx.h"
 # include "../libft/include/libft.h"
 # include <math.h>
+# include <mlx.h>
+# include <fcntl.h>
 
 # define WIDTH 1920
 # define HEIGHT 1080
@@ -32,13 +34,17 @@ typedef struct		s_pos
 	double			x;
 	double			y;
 	double			z;
+	double			z_tmp;
 }					t_pos;
 
 typedef struct		s_color
 {
-	int				r;
-	int				g;
-	int				b;
+	int				red;
+	int				green;
+	int				blue;
+	int				startc;
+	int				endc;
+	int				color;
 }					t_color;
 
 typedef struct		s_window
@@ -76,6 +82,8 @@ typedef struct		s_fdf
 	double			y_teta;
 	double			map_width;
 	double			map_height;
+	double			z;
+	double			z_1;
 	int				bpp;
 	int				size_l;
 	int				endian;
@@ -98,6 +106,7 @@ void				fdf_algo(t_fdf *fdf);
 int					creat_tab(t_fdf *fdf);
 void				init_color(t_fdf *fdf);
 void				fdf_algo(t_fdf *fdf);
-
+int					get_color(t_brese *bres, t_fdf *fdf);
+void				hextorgb(int hex, t_fdf *fdf);
 
 #endif

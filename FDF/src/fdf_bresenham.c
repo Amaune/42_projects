@@ -11,8 +11,7 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-
-#include "fdf1.h"
+#include "fdf.h"
 
 void	fill_pixel(t_fdf *fdf, int x, int y)
 {
@@ -21,9 +20,9 @@ void	fill_pixel(t_fdf *fdf, int x, int y)
 	i = (x * 4) + (y * (fdf->size_l));
 	if (x > 0 && y > 0 && x < WIDTH && y < HEIGHT)
 	{
-		fdf->img[i] = (char)fdf->color.b;
-		fdf->img[i + 1] = (char)fdf->color.g;
-		fdf->img[i + 2] = (char)fdf->color.r;
+		fdf->img[i] = (char)fdf->color.blue;
+		fdf->img[i + 1] = (char)fdf->color.green;
+		fdf->img[i + 2] = (char)fdf->color.red;
 	}
 }
 
@@ -39,6 +38,12 @@ void    premiercas(t_brese bres, t_fdf *fdf)
 			bres.cumul -= bres.dx;
 			bres.y += bres.yinc;
 		}
+		if (fdf->z == 0 && fdf->z == fdf->z_1)
+			hextorgb(fdf->color.startc, fdf);
+		else if (fdf->z < fdf->z_1 || fdf->z > fdf->z_1)
+			get_color(&bres, fdf);
+		else
+			hextorgb(fdf->color.endc, fdf);
 		fill_pixel(fdf, (double)bres.x, (double)bres.y);
 		bres.i++;
 	}
@@ -56,6 +61,12 @@ void    secondcas(t_brese bres, t_fdf *fdf)
 			bres.cumul -= bres.dy;
 			bres.x += bres.xinc; 
 		}
+		if (fdf->z == 0 && fdf->z == fdf->z_1)
+			hextorgb(fdf->color.startc, fdf);
+		else if (fdf->z < fdf->z_1 || fdf->z > fdf->z_1)
+			get_color(&bres, fdf);
+		else
+			hextorgb(fdf->color.endc, fdf);
 		fill_pixel(fdf, (double)bres.x, (double)bres.y);
 		bres.i++;
 	}
@@ -75,6 +86,7 @@ void    bresenham(t_fdf *fdf)
 	bres.yinc = (bres.dy > 0) ? 1 : -1;
 	bres.dx = fabs(bres.dx);
 	bres.dy = fabs(bres.dy);
+	//get_color(&bres, fdf);
 	fill_pixel(fdf, (double)bres.x, (double)bres.y);
 	if (bres.dx > bres.dy)
 		premiercas(bres, fdf);

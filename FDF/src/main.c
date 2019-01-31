@@ -11,7 +11,7 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "fdf1.h"
+#include "fdf.h"
 
 void	fdf_display(t_fdf *fdf)
 {
@@ -50,9 +50,9 @@ int     deal_key(int key, void *param)
 	if (key == 53)
 		exit(EXIT_SUCCESS);
 	if (key == 121)
-		tmp->elev -= 0.01;
+		tmp->elev -= 0.05;
 	if (key == 116)
-		tmp->elev += 0.01;
+		tmp->elev += 0.05;
 	if (key == 123)
 		tmp->decal_x -= 10;
 	if (key == 124)
@@ -62,40 +62,40 @@ int     deal_key(int key, void *param)
 	if (key == 126)
 		tmp->decal_y -= 10;
 	if (key == 86)
-		tmp->teta -= 0.02;
+		tmp->teta -= 0.05;
 	if (key == 88)
-		tmp->teta += 0.02;
+		tmp->teta += 0.05;
 	if (key == 91)
-		tmp->x_teta -= 0.02;
+		tmp->x_teta -= 0.05;
 	if (key == 84)
-		tmp->x_teta += 0.02;
+		tmp->x_teta += 0.05;
 	if (key == 2)
-		tmp->y_teta -= 0.02;
+		tmp->y_teta -= 0.05;
 	if (key == 0)
-		tmp->y_teta += 0.02;
+		tmp->y_teta += 0.05;
 	if (key == 18)
 	{
-		tmp->color.r = 255;
-		tmp->color.g = 0;
-		tmp->color.b = 0;
+		tmp->color.red = 255;
+		tmp->color.green = 0;
+		tmp->color.blue = 0;
 	}
 	if (key == 19)
 	{
-		tmp->color.r = 0;
-		tmp->color.g = 255;
-		tmp->color.b = 0;
+		tmp->color.red = 0;
+		tmp->color.green = 255;
+		tmp->color.blue = 0;
 	}
 	if (key == 20)
 	{
-		tmp->color.r = 0;
-		tmp->color.g = 0;
-		tmp->color.b = 255;
+		tmp->color.red = 0;
+		tmp->color.green = 0;
+		tmp->color.blue = 255;
 	}
 	if (key == 21)
 	{
-		tmp->color.r = 255;
-		tmp->color.g = 255;
-		tmp->color.b = 255;
+		tmp->color.red = 255;
+		tmp->color.green = 255;
+		tmp->color.blue = 255;
 	}
 	if (key == 49)
 	{
