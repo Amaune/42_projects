@@ -12,29 +12,48 @@
 # **************************************************************************** #
 
 NAME = fillit
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
+PATH_OBJ = ./obj/
+PATH_LIB = ./libft/
+PATH_INC = ./include/
+PATH_SRC = ./src/
+LIB = $(PATH_LIB)libft.a
 
-LIBS = libft/libft.a
+RED = \e[31m
+GREEN = \e[92m
+GREEN1 = \e[92;7m
+END = \e[97m
+END1 = \e[0m
 
-SRC = src/fill_checkpose.c src/fill_error.c src/fill_map.c src/fill_solve.c \
-		src/fill_read_it.c src/lstcount.c src/main.c src/fill_free.c
-OBJ = $(SRC:.c=.o)
+FILES_Fillit = main fill_solve fill_read_it fill_error fill_map lstcount fill_checkpose
+INC = $(PATH_INC)fillit.h
+OBJ_Fillit = $(addprefix $(PATH_OBJ), $(addsuffix .o , $(FILES_Fillit)))
+SRC_Fillit = $(addprefix $(PATH_SRC), $(addsuffix .c , $(FILES_Fillit)))
 
-CFLAGS = -Werror -Wextra -Wall -Iincludes -g
+all: obj $(NAME)
 
-all: $(NAME)
+$(NAME): $(OBJ_Fillit) $(LIB)
+	@$(CC) $(CFLAGS) $(SRC_Fillit) $(LIB) -o $(NAME)
 
-$(NAME): $(OBJ)
-	@$(MAKE) -C libft	
-	@$(CC) $(LIBS) $(OBJ) -o $@
+$(LIB):
+	@make -C $(PATH_LIB)
 
-%.o: %.c
-	@gcc $(CFLAGS) -o $@ -c $<
-clean:
-	@rm -f $(OBJ)
-	@cd libft && $(MAKE) clean
+obj:
+	@mkdir -p obj
+
+$(PATH_OBJ)%.o: $(PATH_SRC)%.c $(PATH_INC)*.h
+	@$(CC) $(CFLAGS) -I $(PATH_INC) -c $< -o $@
+
+clean: 
+	@rm -f $(OBJ_Fillit)
+	@rm -rf $(PATH_OBJ)
+	@make -C $(PATH_LIB) clean
+	@printf "$(RED)[Object Fillit Deleted] $(END)\n"
 
 fclean: clean
-	@rm -f $(NAME)
-	@cd libft && $(MAKE) fclean
+	@rm -rf $(NAME)
+	@make -C $(PATH_LIB) fclean
+	@printf "$(RED)[$(NAME) Deleted] $(END)\n"
 
 re: fclean all
