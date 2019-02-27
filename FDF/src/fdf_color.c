@@ -15,47 +15,47 @@
 
 void	hextorgb(int hex, t_fdf *fdf)
 {
-	fdf->color.red = (hex >> 16) & 255;
-	fdf->color.green = (hex >> 8) & 255;
-	fdf->color.blue = (hex) & 255;
+	RED = (hex >> 16) & 0xFF;
+	GREEN = (hex >> 8) & 0xFF;
+	BLUE = (hex) & 0xFF;
 }
 
 double	percent(int start, int end, int current)
 {
-    double placement;
-    double distance;
+	double	placement;
+	double	distance;
 
-    placement = current - start;
-    distance = end - start;
-    return ((distance == 0) ? 1.0 : (placement / distance));
+	placement = current - start;
+	distance = end - start;
+	return ((distance == 0) ? 1.0 : (placement / distance));
 }
 
-int		get_light(int start, int end, double percentage)
+int		get_light(int start, int end, double per)
 {
-	return ((int)((1 - percentage) * start + percentage * end));
+	return ((int)((1 - per) * start + per * end));
 }
 
 int		get_color(t_brese *bres, t_fdf *fdf)
 {
-	double  percentage;
+	double	per;
 
-	if (fdf->color.color == fdf->color.endc)
+	if (fdf->color.color == ECOLOR)
 		return (1);
-	if (bres->x > bres->y)
-		percentage = percent(fdf->start.x, fdf->end.x, bres->x);
+	if (bres->dx > bres->dy)
+		per = percent(fdf->start.x, fdf->end.x, bres->x);
 	else
-		percentage = percent(fdf->start.y, fdf->end.y, bres->y);
+		per = percent(fdf->start.y, fdf->end.y, bres->y);
 	if (fabs(fdf->z) < fabs(fdf->z_1))
 	{
-		fdf->color.red = get_light((fdf->color.startc >> 16) & 0xFF, (fdf->color.endc >> 16) & 0xFF, percentage);
-		fdf->color.green = get_light((fdf->color.startc >> 8) & 0xFF, (fdf->color.endc >> 8) & 0xFF, percentage);
-		fdf->color.blue = get_light(fdf->color.startc & 0xFF, fdf->color.endc & 0xFF, percentage);
+		RED = get_light((SCOLOR >> 16) & 0xFF, (ECOLOR >> 16) & 0xFF, per);
+		GREEN = get_light((SCOLOR >> 8) & 0xFF, (ECOLOR >> 8) & 0xFF, per);
+		BLUE = get_light(SCOLOR & 0xFF, ECOLOR & 0xFF, per);
 	}
 	else
 	{
-		fdf->color.red = get_light((fdf->color.endc >> 16) & 0xFF, (fdf->color.startc >> 16) & 0xFF, percentage);
-		fdf->color.green = get_light((fdf->color.endc >> 8) & 0xFF, (fdf->color.startc >> 8) & 0xFF, percentage);
-		fdf->color.blue = get_light(fdf->color.endc & 0xFF, fdf->color.startc & 0xFF, percentage);
+		RED = get_light((ECOLOR >> 16) & 0xFF, (SCOLOR >> 16) & 0xFF, per);
+		GREEN = get_light((ECOLOR >> 8) & 0xFF, (SCOLOR >> 8) & 0xFF, per);
+		BLUE = get_light(ECOLOR & 0xFF, SCOLOR & 0xFF, per);
 	}
 	return (1);
 }

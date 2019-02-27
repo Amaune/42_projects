@@ -26,7 +26,7 @@ void	fill_pixel(t_fdf *fdf, int x, int y)
 	}
 }
 
-void    premiercas(t_brese bres, t_fdf *fdf)
+void	premiercas(t_brese bres, t_fdf *fdf)
 {
 	bres.cumul = bres.dx / 2;
 	while (bres.i <= bres.dx)
@@ -38,42 +38,43 @@ void    premiercas(t_brese bres, t_fdf *fdf)
 			bres.cumul -= bres.dx;
 			bres.y += bres.yinc;
 		}
-		if (fdf->z == 0 && fdf->z == fdf->z_1)
-			hextorgb(fdf->color.startc, fdf);
+		if ((fdf->z <= fdf->z_1 || fdf->z >= fdf->z_1) && fabs(fdf->z) > 0
+			&& fabs(fdf->z_1) > 0)
+			hextorgb(fdf->color.endc, fdf);
 		else if (fdf->z < fdf->z_1 || fdf->z > fdf->z_1)
 			get_color(&bres, fdf);
 		else
-			hextorgb(fdf->color.endc, fdf);
+			hextorgb(fdf->color.startc, fdf);
 		fill_pixel(fdf, (double)bres.x, (double)bres.y);
 		bres.i++;
 	}
 }
 
-void    secondcas(t_brese bres, t_fdf *fdf)
+void	secondcas(t_brese bres, t_fdf *fdf)
 {
 	bres.cumul = bres.dy / 2;
-	while (bres.i <= bres.dy) 
+	while (bres.i <= bres.dy)
 	{
 		bres.y += bres.yinc;
 		bres.cumul += bres.dx;
-		if (bres.cumul >= bres.dy) 
+		if (bres.cumul >= bres.dy)
 		{
 			bres.cumul -= bres.dy;
-			bres.x += bres.xinc; 
+			bres.x += bres.xinc;
 		}
-		if (fdf->z == 0 && fdf->z == fdf->z_1)
-			hextorgb(fdf->color.startc, fdf);
+		if ((fdf->z <= fdf->z_1 || fdf->z >= fdf->z_1) && fabs(fdf->z) > 0
+			&& fabs(fdf->z_1) > 0)
+			hextorgb(fdf->color.endc, fdf);
 		else if (fdf->z < fdf->z_1 || fdf->z > fdf->z_1)
 			get_color(&bres, fdf);
 		else
-			hextorgb(fdf->color.endc, fdf);
+			hextorgb(fdf->color.startc, fdf);
 		fill_pixel(fdf, (double)bres.x, (double)bres.y);
 		bres.i++;
 	}
-	
 }
 
-void    bresenham(t_fdf *fdf)
+void	bresenham(t_fdf *fdf)
 {
 	t_brese	bres;
 
@@ -86,10 +87,13 @@ void    bresenham(t_fdf *fdf)
 	bres.yinc = (bres.dy > 0) ? 1 : -1;
 	bres.dx = fabs(bres.dx);
 	bres.dy = fabs(bres.dy);
-	//get_color(&bres, fdf);
+	if (fdf->z == 0)
+		hextorgb(fdf->color.startc, fdf);
+	else if (fdf->z != 0)
+		hextorgb(fdf->color.endc, fdf);
 	fill_pixel(fdf, (double)bres.x, (double)bres.y);
 	if (bres.dx > bres.dy)
 		premiercas(bres, fdf);
-	else 
+	else
 		secondcas(bres, fdf);
 }

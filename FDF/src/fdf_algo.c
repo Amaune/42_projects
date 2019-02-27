@@ -13,7 +13,7 @@
 
 #include "fdf.h"
 
-void       fdf_algo_x(t_fdf *fdf)
+void	fdf_algo_x(t_fdf *fdf)
 {
 	int i;
 	int j;
@@ -25,9 +25,11 @@ void       fdf_algo_x(t_fdf *fdf)
 		while (j < fdf->map_width - 1)
 		{
 			fdf->start.x = fdf->f_tab[i][j].x * fdf->zoom + fdf->decal_x;
-			fdf->start.y = fdf->f_tab[i][j].y * fdf->zoom - (fdf->f_tab[i][j].z * fdf->elev) + fdf->decal_y;
+			fdf->start.y = fdf->f_tab[i][j].y * fdf->zoom - (fdf->f_tab[i][j].z
+				* fdf->elev) + fdf->decal_y;
 			fdf->end.x = fdf->f_tab[i][j + 1].x * fdf->zoom + fdf->decal_x;
-			fdf->end.y = fdf->f_tab[i][j + 1].y * fdf->zoom - (fdf->f_tab[i][j + 1].z * fdf->elev) + fdf->decal_y;
+			fdf->end.y = fdf->f_tab[i][j + 1].y * fdf->zoom - (fdf->f_tab[i][j
+				+ 1].z * fdf->elev) + fdf->decal_y;
 			fdf->z = fdf->f_tab[i][j].z_tmp;
 			fdf->z_1 = fdf->f_tab[i][j + 1].z_tmp;
 			bresenham(fdf);
@@ -41,7 +43,7 @@ void	fdf_algo_y(t_fdf *fdf)
 {
 	int i;
 	int j;
-	
+
 	i = 0;
 	while (i + 1 < fdf->map_height)
 	{
@@ -49,9 +51,11 @@ void	fdf_algo_y(t_fdf *fdf)
 		while (j < fdf->map_width)
 		{
 			fdf->start.x = fdf->f_tab[i][j].x * fdf->zoom + fdf->decal_x;
-			fdf->start.y = fdf->f_tab[i][j].y * fdf->zoom - (fdf->f_tab[i][j].z * fdf->elev) + fdf->decal_y;
+			fdf->start.y = fdf->f_tab[i][j].y * fdf->zoom - (fdf->f_tab[i][j].z
+				* fdf->elev) + fdf->decal_y;
 			fdf->end.x = fdf->f_tab[i + 1][j].x * fdf->zoom + fdf->decal_x;
-			fdf->end.y = fdf->f_tab[i + 1][j].y * fdf->zoom - (fdf->f_tab[i + 1][j].z * fdf->elev) + fdf->decal_y;
+			fdf->end.y = fdf->f_tab[i + 1][j].y * fdf->zoom - (fdf->f_tab[i +
+				1][j].z * fdf->elev) + fdf->decal_y;
 			fdf->z = fdf->f_tab[i][j].z_tmp;
 			fdf->z_1 = fdf->f_tab[i + 1][j].z_tmp;
 			bresenham(fdf);

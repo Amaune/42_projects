@@ -22,7 +22,12 @@
 
 # define WIDTH 1920
 # define HEIGHT 1080
-
+# define RED	fdf->color.red
+# define GREEN	fdf->color.green
+# define BLUE	fdf->color.blue
+# define SCOLOR	fdf->color.startc
+# define ECOLOR	fdf->color.endc
+	
 typedef struct		s_flst
 {
 	int				*i_tab;
@@ -84,6 +89,8 @@ typedef struct		s_fdf
 	double			map_height;
 	double			z;
 	double			z_1;
+	double			x_index;
+	double			y_index;
 	int				bpp;
 	int				size_l;
 	int				endian;
@@ -105,8 +112,19 @@ int					fdf_traitement(char *src, t_fdf *fdf);
 void				fdf_algo(t_fdf *fdf);
 int					creat_tab(t_fdf *fdf);
 void				init_color(t_fdf *fdf);
+void				init(t_fdf *fdf);
 void				fdf_algo(t_fdf *fdf);
 int					get_color(t_brese *bres, t_fdf *fdf);
 void				hextorgb(int hex, t_fdf *fdf);
+int     			event(int key, t_fdf *fdf);
+void				fdf_display(t_fdf *fdf);
+void				fill_pixel(t_fdf *fdf, int x, int y);
+void				set_hud(t_fdf *fdf);
+void				hud_com(t_fdf *fdf);
+int					check_valid(char **tab, int *count);
+void				free_fdf(t_fdf *fdf, char **tab, char *line);
+void				free_tab(char ***tab);
+void				free_cord(t_fdf *fdf);
+int					mouse_press(int key, int x, int y, t_fdf *fdf);
 
 #endif

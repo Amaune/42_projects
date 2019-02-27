@@ -14,7 +14,7 @@
 NAME	= fdf
 
 SRC 	= main.c fdf_bresenham.c fdf_traitement.c fdf_algo.c fdf_init.c \
-			fdf_color.c
+			fdf_color.c events.c check_error.c plus.c
 
 OBJ		= $(addprefix $(OBJDIR),$(SRC:.c=.o))
 
