@@ -124,5 +124,6 @@ int			fdf_traitement(char *src, t_fdf *fdf)
 	}
 	fdf->map_height = h;
 	creat_tab(fdf);
+	close(fd);
 	return (1);
 }
