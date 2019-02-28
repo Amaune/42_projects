@@ -13,6 +13,20 @@
 
 #include "fdf.h"
 
+void	free_lst(t_fdf *fdf)
+{
+	t_flst *tmp;
+
+	tmp = fdf->map;
+	while (tmp)
+	{
+		fdf->map = fdf->map->next;
+		free(fdf->map->i_tab);
+		free(tmp);
+		tmp = fdf->map;
+	}
+}
+
 int		mouse_press(int key, int x, int y, t_fdf *fdf)
 {
 	(void)x;

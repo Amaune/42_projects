@@ -41,6 +41,7 @@ void	free_cord(t_fdf *fdf)
 
 void	free_fdf(t_fdf *fdf, char **tab, char *line)
 {
+	free_lst(fdf);	
 	free(fdf);
 	free(line);
 	free_tab(&tab);

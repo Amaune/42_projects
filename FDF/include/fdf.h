@@ -126,5 +126,6 @@ void				free_fdf(t_fdf *fdf, char **tab, char *line);
 void				free_tab(char ***tab);
 void				free_cord(t_fdf *fdf);
 int					mouse_press(int key, int x, int y, t_fdf *fdf);
+void				free_lst(t_fdf *fdf);
 
 #endif
