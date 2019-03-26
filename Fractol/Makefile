@@ -13,7 +13,7 @@
 
 NAME	= fractol
 
-SRC 	= main.c event.c multith.c fractals.c
+SRC 	= main.c event.c multith.c fractals.c colors.c plus.c
 
 OBJ		= $(addprefix $(OBJDIR),$(SRC:.c=.o))
 
@@ -41,27 +41,27 @@ OBJDIR	= ./obj/
 all: obj $(FT_LIB) $(MLX_LIB) $(NAME)
 
 obj:
-	mkdir -p $(OBJDIR)
+	@mkdir -p $(OBJDIR)
 
 $(OBJDIR)%.o:$(SRCDIR)%.c include/fractol.h
 	$(CC) $(CFLAGS) $(MLX_INC) $(FT_INC) -I $(INCDIR) -o $@ -c $<
 
 $(FT_LIB):
-	make -C $(FT)
+	@make -C $(FT)
 
 $(MLX_LIB):
-	make -C $(MLX)
+	@make -C $(MLX)
 
 $(NAME): $(OBJ)
 	$(CC) $(OBJ) $(MLX_LNK) $(FT_LNK) -lm -o $(NAME)
 
 clean:
-	rm -rf $(OBJDIR)
-	make -C $(FT) clean
-	make -C $(MLX) clean
+	@rm -rf $(OBJDIR)
+	@make -C $(FT) clean
+	@make -C $(MLX) clean
 
 fclean: clean
-	rm -rf $(NAME)
-	make -C $(FT) fclean
+	@rm -rf $(NAME)
+	@make -C $(FT) fclean
 
 re: fclean all

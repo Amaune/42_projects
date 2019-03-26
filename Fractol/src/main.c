@@ -13,33 +13,6 @@
 
 #include "fractol.h"
 
-void	init_julia(t_file *file)
-{
-	file->frac.zoom = 1;
-	file->frac.moveX = 0;
-	file->frac.moveY = 0;
-	file->frac.maxIterations = 250;
-	file->frac.cRe = -0.7;
-	file->frac.cIm = 0.27015;
-}
-
-void	init_mandelbrot(t_file *file)
-{
-	file->frac.zoom = 1; 
-	file->frac.moveX = -0.5; 
-	file->frac.moveY = 0;
-	file->frac.maxIterations = 250;
-	file->frac.cRe = 0;
-	file->frac.cIm = 0;
-}
-
-int		out(void *param)
-{
-	(void)param;
-	exit(0);
-	return (0);
-}
-
 void	file_display(t_file *file)
 {
 	file->img_ptr = mlx_new_image(file->mlx_ptr, WIDTH, HEIGHT);
@@ -49,37 +22,26 @@ void	file_display(t_file *file)
 	multithread(file);
 	mlx_put_image_to_window(file->mlx_ptr, file->win_ptr, file->img_ptr, 0, 0);
 	mlx_destroy_image(file->mlx_ptr, file->img_ptr);
-}	
+}
 
 int		main(int ac, char **av)
 {
 	t_file	*file;
 	int		fd;
 
-    (void)av;
-	(void)ac;
 	fd = 0;
 	if (ac != 2)
-		return (write(1, "usage: ./filetol map\n", 17));
+		return (write(1, 
+		"usage: ./fractol [julia, mandelbrot, burningship]\n", 50));
+	if (!((ft_strcmp(av[1], "julia") == 0) || (ft_strcmp(av[1],
+		"mandelbrot") == 0) || (ft_strcmp(av[1], "burningship") == 0)))
+		return (write(1, 
+		"wrong name [julia, mandelbrot, burningship]\n", 44));
 	if (!(file = malloc(sizeof(t_file))))
 		return (0);
 	file->mlx_ptr = mlx_init();
 	file->win_ptr = mlx_new_window(file->mlx_ptr, WIDTH, HEIGHT, "fractol");
-	if (ft_strcmp(av[1], "julia") == 0)
-	{
-		init_julia(file);
-		file->fct = &(julia);
-	}
-	if (ft_strcmp(av[1], "mandelbrot") == 0)
-	{
-		init_mandelbrot(file);
-		file->fct = &(mandelbrot);
-	}
-	if (ft_strcmp(av[1], "burningship") == 0)
-	{
-		init_mandelbrot(file);
-		file->fct = &(burningship);
-	}
+	selector(av[1], file);
 	file->tmp_x = 0;
 	file->tmp_y = 0;
 	file->radius = 4;

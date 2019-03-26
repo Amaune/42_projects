@@ -13,36 +13,6 @@
 
 #include "fractol.h"
 
-/*void		get_smooth_color(t_file *file, double sc)
-{
-	int		clr1;
-	int		clr2;
-	double	t1;
-	double	t2;
-
-	clr1 = (int)sc;
-	t2 = sc - clr1;
-	t1 = 1 - t2;
-	clr1 = clr1 % 255;
-	clr2 = (clr1 + 1) % 255;
-	file->color.red = (int)(clr1 * t1 + clr2 * t2);
-	file->color.green = (int)(clr1 * t1 + clr2 * t2);
-	file->color.blue = (int)(clr1 * t1 + clr2 * t2);
-}*/
-
-double	smooth_coloring(t_file *file, int i)
-{
-	double	sc;
-	double	p;
-	double	fman;
-
-	fman = (file->frac.newIm * file->frac.newIm) + (file->frac.newRe * file->frac.newRe);
-	//sc = (i - log(log(file->frac.newRe * file->frac.newRe))) / log(log(file->radius));
-	p = log(fman * fman) / log((fman - 1) * (fman - 1));
-	sc = i - (log(0.5 * fman)) - (log(0.5 * log(file->radius)) / log(p));
-	return (sc);
-}
-
 void	fill_pixel(int x, int y, t_file *file)
 {
 	int i;
@@ -56,30 +26,36 @@ void	fill_pixel(int x, int y, t_file *file)
 	}
 }
 
-void julia(t_file *file, int x, int y)
+void	color(double sc, t_file *file)
+{
+	file->color.blue = (sc / file->frac.maxit) * 2 * (file->color.b % 255);
+	file->color.green = (sc / file->frac.maxit) * 2 * (file->color.g % 255);
+	file->color.red = (sc / file->frac.maxit) * 2 * (file->color.r % 255);
+}
+
+void	julia(t_file *file, int x, int y)
 {
 	int		i;
 	double	sc;
 
-	file->frac.newRe = 1.5 * (x - WIDTH / 2) / (0.5 * file->frac.zoom * WIDTH) + file->frac.moveX;
-	file->frac.newIm = (y - HEIGHT / 2) / (0.5 * file->frac.zoom * HEIGHT) + file->frac.moveY;
+	file->frac.newre = x / file->frac.zoom + file->frac.movex;
+	file->frac.newim = y / file->frac.zoom + file->frac.movey;
 	i = 0;
-	while (i < file->frac.maxIterations)
+	while (i < file->frac.maxit)
 	{
-		file->frac.oldRe = file->frac.newRe;
-		file->frac.oldIm = file->frac.newIm;
-		file->frac.newRe = file->frac.oldRe * file->frac.oldRe - file->frac.oldIm * file->frac.oldIm + file->frac.cRe;
-		file->frac.newIm = 2 * file->frac.oldRe * file->frac.oldIm + file->frac.cIm;
-		if ((file->frac.newRe * file->frac.newRe + file->frac.newIm * file->frac.newIm) > 4)
-			break;
+		file->frac.oldre = file->frac.newre;
+		file->frac.oldim = file->frac.newim;
+		file->frac.newre = file->frac.oldre * file->frac.oldre -
+		file->frac.oldim * file->frac.oldim + file->frac.cre;
+		file->frac.newim = 2 * file->frac.oldre * file->frac.oldim +
+		file->frac.cim;
+		if ((file->frac.newre * file->frac.newre + file->frac.newim *
+		file->frac.newim) > 4)
+			break ;
 		i++;
 	}
-	//sc = i + 1 - log(log(file->frac.newIm)) / log(3);
-	//get_smooth_color(file, sc);
 	sc = smooth_coloring(file, i);
-	file->color.blue = ((int)sc) % 255 * file->frac.maxIterations;
-	file->color.green = ((int)sc) % 255 * i % file->frac.maxIterations;
-	file->color.red = ((int)sc) % 255 % file->frac.maxIterations;
+	color(sc, file);
 	fill_pixel(x, y, file);
 }
 
@@ -87,48 +63,52 @@ void	mandelbrot(t_file *file, int x, int y)
 {
 	int		i;
 	double	sc;
-	
-	file->frac.cRe = 1.5 * (x - WIDTH / 2) / (0.5 * file->frac.zoom * WIDTH) + file->frac.moveX;
-	file->frac.cIm = (y - HEIGHT / 2) / (0.5 * file->frac.zoom * HEIGHT) + file->frac.moveY;
-	file->frac.newRe = file->frac.newIm = file->frac.oldRe = file->frac.oldIm = 0;
+
+	file->frac.cre = x / file->frac.zoom + file->frac.movex;
+	file->frac.cim = y / file->frac.zoom + file->frac.movey;
+	init2(file);
 	i = 0;
-	while (i < file->frac.maxIterations)
+	while (i < file->frac.maxit)
 	{
-		file->frac.oldRe = file->frac.newRe;
-		file->frac.oldIm = file->frac.newIm;
-		file->frac.newRe = file->frac.oldRe * file->frac.oldRe - file->frac.oldIm * file->frac.oldIm + file->frac.cRe;
-		file->frac.newIm = 2 * file->frac.oldRe * file->frac.oldIm + file->frac.cIm;
-		if((file->frac.newRe * file->frac.newRe + file->frac.newIm * file->frac.newIm) > 4)
-			break;
+		file->frac.oldre = file->frac.newre;
+		file->frac.oldim = file->frac.newim;
+		file->frac.newre = file->frac.oldre * file->frac.oldre -
+		file->frac.oldim * file->frac.oldim + file->frac.cre;
+		file->frac.newim = 2 * file->frac.oldre * file->frac.oldim
+		+ file->frac.cim;
+		if ((file->frac.newre * file->frac.newre + file->frac.newim
+		* file->frac.newim) > 4)
+			break ;
 		i++;
 	}
 	sc = smooth_coloring(file, i);
-	file->color.blue = ((int)sc) % 255 * file->frac.maxIterations;
-	file->color.green = ((int)sc) % 255 * i % file->frac.maxIterations;
-	file->color.red = ((int)sc) % 255 % file->frac.maxIterations;
+	color(sc, file);
 	fill_pixel(x, y, file);
 }
 
 void	burningship(t_file *file, int x, int y)
 {
-	int i;
-	
-	file->frac.cRe = 1.5 * (x - WIDTH / 2) / (0.5 * file->frac.zoom * WIDTH) + file->frac.moveX;
-	file->frac.cIm = (y - HEIGHT / 2) / (0.5 * file->frac.zoom * HEIGHT) + file->frac.moveY;
-	file->frac.newRe = file->frac.newIm = file->frac.oldRe = file->frac.oldIm = 0;
+	int		i;
+	double	sc;
+
+	file->frac.cre = x / file->frac.zoom + file->frac.movex;
+	file->frac.cim = y / file->frac.zoom + file->frac.movey;
+	init2(file);
 	i = 0;
-	while (i < file->frac.maxIterations)
+	while (i < file->frac.maxit)
 	{
-		file->frac.oldRe = file->frac.newRe;
-		file->frac.oldIm = file->frac.newIm;
-		file->frac.newRe = fabs(file->frac.oldRe) * fabs(file->frac.oldRe) - fabs(file->frac.oldIm) * fabs(file->frac.oldIm) + file->frac.cRe;
-		file->frac.newIm = 2 * fabs(file->frac.oldRe) * fabs(file->frac.oldIm) + file->frac.cIm;
-		if((file->frac.newRe * file->frac.newRe + file->frac.newIm * file->frac.newIm) > 4)
-			break;
+		file->frac.oldre = file->frac.newre;
+		file->frac.oldim = file->frac.newim;
+		file->frac.newre = fabs(file->frac.oldre) * fabs(file->frac.oldre) -
+		fabs(file->frac.oldim) * fabs(file->frac.oldim) + file->frac.cre;
+		file->frac.newim = 2 * fabs(file->frac.oldre) * fabs(file->frac.oldim)
+		+ file->frac.cim;
+		if ((file->frac.newre * file->frac.newre + file->frac.newim *
+		file->frac.newim) > 4)
+			break ;
 		i++;
 	}
-	file->color.blue = i % 255 * (i / file->frac.maxIterations);
-	file->color.green = i % 255;
-	file->color.red = i % 255;
+	sc = smooth_coloring(file, i);
+	color(sc, file);
 	fill_pixel(x, y, file);
 }

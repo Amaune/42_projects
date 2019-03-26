@@ -31,24 +31,24 @@ typedef struct		s_color
 	int				red;
 	int				green;
 	int				blue;
-	int				startc;
-	int				endc;
-	int				color;
+	int				b;
+	int				r;
+	int				g;
 }					t_color;
 
 typedef struct		s_frac
 {
-	int				maxIterations;
-	double			cRe;
-	double			cIm;
-	double			newRe;
-	double			newIm;
-	double			oldRe;
-	double			oldIm;
+	int				maxit;
+	double			cre;
+	double			cim;
+	double			newre;
+	double			newim;
+	double			oldre;
+	double			oldim;
 	double			zoom;
-	double			moveX;
-	double			moveY;
-}                   t_frac;
+	double			movex;
+	double			movey;
+}					t_frac;
 
 typedef struct		s_file
 {
@@ -61,6 +61,7 @@ typedef struct		s_file
 	int				tmp_x;
 	int				tmp_y;
 	int				radius;
+	int				press;
 	double			elev;
 	double			zoom;
 	double			decal_x;
@@ -84,7 +85,7 @@ typedef struct		s_file
 	t_frac			frac;
 }					t_file;
 
-int		            event(int key, t_file *file);
+int					event(int key, t_file *file);
 void				julia(t_file *file, int x, int y);
 void				file_display(t_file *file);
 int					mouse_press(int key, int x, int y, t_file *file);
@@ -92,6 +93,11 @@ void				multithread(t_file *file);
 void				fill_pixel(int x, int y, t_file *file);
 void				mandelbrot(t_file *file, int x, int y);
 int					mouse_move(int x, int y, t_file *file);
-void    			burningship(t_file *file, int x, int y);
+void				burningship(t_file *file, int x, int y);
+double				smooth_coloring(t_file *file, int i);
+void				set_colors(t_file *file);
+int					out(void *param);
+void				init2(t_file *file);
+void				selector(char *str, t_file *file);
 
 #endif
